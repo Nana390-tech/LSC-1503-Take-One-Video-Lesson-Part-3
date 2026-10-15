@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Take One – LSC 1503 Video Portfolio</title>
+<style>
+:root{
+  --dark:#1E1B24; --dark2:#2E2A38; --coral:#E8524A; --coral2:#C93E37; --coral-l:#FDE9E7;
+  --cream:#FFF6F0; --ink:#1E1B24; --muted:#6C6675; --line:#EADFD8; --ok:#2E9E5B; --bad:#D64545; --gold:#F4B740;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.55}
+header{background:var(--dark);color:#fff;padding:22px 16px 18px;text-align:center;position:relative;overflow:hidden}
+header:before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:repeating-linear-gradient(90deg,#fff 0 18px,var(--dark) 18px 36px);opacity:.25}
+header h1{font-size:1.9rem;letter-spacing:.5px}
+header h1 span{color:var(--coral)}
+header p{opacity:.85}
+.topbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;margin-top:12px}
+.pill{background:rgba(255,255,255,.12);padding:6px 14px;border-radius:999px;font-weight:600;font-size:.9rem}
+.pill b{color:var(--coral)}
+nav{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:12px 10px;background:#fff;border-bottom:3px solid var(--coral);position:sticky;top:0;z-index:5}
+nav button{border:2px solid var(--dark);background:#fff;color:var(--dark);padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;font-size:.9rem}
+nav button.active{background:var(--dark);color:#fff}
+nav button.done:after{content:" ✓";color:var(--coral)}
+main{max-width:980px;margin:0 auto;padding:20px 16px 60px}
+.card{background:#fff;border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 4px 14px rgba(30,27,36,.08);border:1px solid var(--line)}
+.phase-tag{display:inline-block;background:var(--coral);color:#fff;font-weight:800;font-size:.75rem;letter-spacing:1px;padding:4px 10px;border-radius:6px;margin-bottom:8px}
+h2{color:var(--dark);margin-bottom:6px;font-size:1.45rem}
+h3{color:var(--coral2);margin:10px 0 6px}
+p.lead{color:var(--muted);margin-bottom:12px}
+.btn{border:none;border-radius:10px;padding:10px 18px;font-weight:700;cursor:pointer;font-size:.95rem;transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-dark{background:var(--dark);color:#fff}
+.btn-coral{background:var(--coral);color:#fff}
+.btn-ghost{background:#fff;color:var(--dark);border:2px solid var(--dark)}
+.mini{padding:6px 10px;border-radius:8px;font-size:.85rem}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.opt{border:2px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;background:#fff;display:flex;gap:10px;align-items:flex-start}
+.opt:hover{border-color:var(--coral)}
+.opt.sel{border-color:var(--dark);background:#F3F1F6}
+.opt.right{border-color:var(--ok);background:#EAF7EF}
+.opt.wrong{border-color:var(--bad);background:#FCECEC}
+.opt.missed{border-color:var(--gold);background:#FFF7E3}
+.frame-pick{border:3px solid var(--line);border-radius:14px;padding:10px;cursor:pointer;text-align:center;background:#fff}
+.frame-pick:hover{border-color:var(--coral)}
+.frame-pick.right{border-color:var(--ok);background:#EAF7EF}
+.frame-pick.wrong{border-color:var(--bad);background:#FCECEC}
+.fb{margin-top:10px;padding:10px 14px;border-radius:10px;font-weight:600}
+.fb.good{background:#EAF7EF;color:#1E6B3E}
+.fb.bad{background:#FCECEC;color:#8A2525}
+.fb.info{background:var(--coral-l);color:#7A2520}
+.check{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line)}
+.check input{width:20px;height:20px;margin-top:3px;accent-color:var(--coral)}
+textarea,input[type=text],select{width:100%;border:2px solid var(--line);border-radius:10px;padding:10px 12px;font-size:1rem;font-family:inherit;background:#fff}
+textarea:focus,input[type=text]:focus,select:focus{outline:none;border-color:var(--coral)}
+textarea{min-height:80px;resize:vertical}
+.studio{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+@media(max-width:760px){.studio{grid-template-columns:1fr}}
+.screen{background:#000;border-radius:14px;overflow:hidden;position:relative;aspect-ratio:16/9}
+.screen video{width:100%;height:100%;object-fit:cover;display:block}
+.rec-dot{position:absolute;top:10px;left:10px;background:var(--coral);color:#fff;font-weight:800;padding:4px 10px;border-radius:999px;font-size:.85rem;display:none}
+.rec-dot.on{display:block;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.4}}
+.timer{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;font-weight:700;padding:4px 10px;border-radius:8px}
+.guide{position:absolute;inset:12% 25%;border:2px dashed rgba(255,255,255,.45);border-radius:50% 50% 12px 12px;pointer-events:none}
+.cuebox{background:var(--coral-l);border:2px solid var(--coral);border-radius:14px;padding:14px;font-size:1.2rem;font-weight:700;min-height:120px}
+.rate{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.stars button{background:none;border:none;font-size:1.5rem;cursor:pointer;color:#D9D3CC}
+.stars button.on{color:var(--gold)}
+.step{display:flex;gap:12px;margin-bottom:12px}
+.step .n{flex:0 0 36px;height:36px;border-radius:50%;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.timeline{display:flex;flex-wrap:wrap;gap:4px;margin:10px 0}
+.timeline div{padding:8px 10px;border-radius:8px;font-size:.82rem;font-weight:700;color:#fff}
+.gloss{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.flip{perspective:800px;height:110px;cursor:pointer}
+.flip-in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .flip-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;text-align:center;backface-visibility:hidden}
+.front{background:var(--dark);color:#fff;font-weight:700}
+.back{background:var(--coral-l);transform:rotateY(180deg);border:2px solid var(--coral);font-size:.85rem}
+.back .ar{font-size:1.1rem;font-weight:700;color:var(--coral2);direction:rtl}
+.badges{display:flex;flex-wrap:wrap;gap:10px}
+.badge{border-radius:12px;padding:10px 14px;background:#F1EEE9;color:#A39C94;font-weight:700}
+.badge.on{background:var(--coral);color:#fff}
+.cert{border:8px double var(--dark);border-radius:18px;padding:30px;text-align:center;background:linear-gradient(135deg,#fff,var(--coral-l))}
+.cert h2{font-size:2rem}
+.cert .name{font-size:1.8rem;font-weight:800;color:var(--coral2);margin:10px 0;border-bottom:2px solid var(--coral);display:inline-block;padding:0 20px}
+footer{text-align:center;color:var(--muted);padding:20px;font-size:.85rem}
+.hidden{display:none}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--dark);color:#fff;padding:10px 18px;border-radius:999px;font-weight:600;z-index:60;opacity:0;transition:.3s}
+.toast.show{opacity:1}
+@media print{header,nav,footer,.no-print,.toast{display:none!important}body{background:#fff}.card{box-shadow:none}}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<header>
+  <h1>🎬 Take <span>One</span></h1>
+  <p>LSC 1503 · Communication Skills Portfolio · Lesson 3: Sample recording, feedback and editing</p>
+  <div class="topbar">
+    <span class="pill">Student: <b id="whoName">—</b></span>
+    <span class="pill">Points: <b id="pts">0</b></span>
+    <button class="btn btn-coral mini no-print" onclick="saveJSON()">💾 Save my work</button>
+    <label class="btn btn-ghost mini no-print">📂 Open saved work<input type="file" accept=".json" class="hidden" onchange="loadJSON(event)"></label>
+  </div>
+</header>
+<nav id="nav"></nav>
+<main id="main"></main>
+<footer>Designed by: Nazila Motahari · LSC 1503 Professional Spoken Communication</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+const PHASES=[{id:"start",name:"Start"},{id:"engage",name:"1. Engage"},{id:"explore",name:"2. Explore: Set up"},{id:"explain",name:"3. Explain: Record"},{id:"extend",name:"4. Extend: Feedback + Edit"},{id:"evaluate",name:"5. Evaluate"}];
+const PARTS=[{id:"intro",t:"Part 1 · Introduction + ID card"},{id:"lpa",t:"Part 2 · LPA reflection"},{id:"skill",t:"Part 3 · Study skill reflection"},{id:"improve",t:"Part 4 · Improvement"},{id:"concl",t:"Part 5 · Conclusion"}];
+
+const SPOT=[
+ {t:"Ahmed sits with a bright window behind him. His face looks dark.",p:true,fb:"Backlight — face the window instead."},
+ {t:"He records in a quiet room with the door closed.",p:false,fb:"Good — a quiet room."},
+ {t:"His phone is on the desk, so the camera looks up at his chin.",p:true,fb:"Camera too low — put it at eye level."},
+ {t:"The air conditioner is very loud.",p:true,fb:"Background noise — switch it off or move."},
+ {t:"He holds his phone sideways (landscape).",p:false,fb:"Good — landscape is the best shape."},
+ {t:"He reads every word from a paper on his lap.",p:true,fb:"Reading — glance at cue cards and look up."},
+ {t:"He forgets to show his ID card at the start.",p:true,fb:"ID card is required for verification."},
+ {t:"He wears smart, neat clothes.",p:false,fb:"Good — look professional."}
+];
+
+const SETUP=[
+ ["💡 Light","Light is on my face (I face the window or a lamp)."],
+ ["🔇 Sound","The room is quiet: no TV, AC, music or people talking."],
+ ["📱 Camera","The camera is at eye level and the phone is landscape (sideways)."],
+ ["🖼️ Framing","You can see my head and shoulders, in the middle of the screen."],
+ ["🧱 Background","My background is plain and tidy."],
+ ["🪪 ID card","My ID card is ready to show."],
+ ["🗂️ Cue cards","My cue cards are next to the camera (not on my lap)."],
+ ["🔋 Battery","My phone has battery and storage space."]
+];
+
+const RATE=[
+ ["Eye contact","Looks at the camera most of the time; only short glances at notes"],
+ ["Voice","Loud and clear"],
+ ["Pace and pauses","Not too fast; pauses between ideas"],
+ ["Signposting","Clear phrases between parts (First… Now, let's move on to…)"],
+ ["Light and sound","Face is bright; no background noise"],
+ ["Framing","Head and shoulders, camera at eye level"]
+];
+
+const EDIT=[
+ ["✂️ Trim","Cut the start and the end (when you press record and stop)."],
+ ["🖼️ Title slides","Add a title slide at the start (name, ID, campus, date) and a small slide before each part."],
+ ["📸 Evidence","Add a screenshot of your LPA form or notes in Part 2."],
+ ["🔊 Check sound","Watch the whole video with headphones. Is your voice clear?"],
+ ["⏱️ Check time","The final video is 3–5 minutes."],
+ ["💾 Export","Save as MP4 and give it a clear name, e.g. Name_ID_Portfolio.mp4"]
+];
+
+const GLOSS=[
+ ["take","لقطة / محاولة تصوير","One recording attempt. “Take one!”"],
+ ["framing","تأطير الصورة","What the camera shows: head and shoulders."],
+ ["eye level","مستوى العين","The camera is at the same height as your eyes."],
+ ["backlight","إضاءة خلفية","Light behind you that makes your face dark."],
+ ["landscape","وضع أفقي","Holding the phone sideways."],
+ ["trim","قصّ","Cut the start or end of a clip."],
+ ["title slide","شريحة العنوان","A slide with text that shows the topic."],
+ ["export","تصدير","Save the finished video as a file (MP4)."],
+ ["peer feedback","ملاحظات الزملاء","Comments from a classmate to help you improve."],
+ ["sample","عيّنة","A short practice version."]
+];
+
+let S={name:"",phase:"start",points:0,done:{},spot:{},spotChecked:false,frame:null,setup:{},part:"intro",cues:{},recSeconds:0,partner:"",ratings:{},stars2:"",wish:"",edit:{},plan:"",final:{}};
+const el=id=>document.getElementById(id);
+const esc=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function addPts(n,m){S.points+=n;el("pts").textContent=S.points;if(m)toast(m)}
+function toast(m){const t=el("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2400)}
+function markDone(id){if(!S.done[id]){S.done[id]=true;addPts(10,"🏅 Badge earned! +10");confetti();renderNav()}}
+function renderNav(){el("nav").innerHTML=PHASES.map(p=>`<button class="${S.phase===p.id?'active':''} ${S.done[p.id]?'done':''}" onclick="go('${p.id}')">${p.name}</button>`).join("");el("whoName").textContent=S.name||"—";el("pts").textContent=S.points}
+function go(id){if(id!=="start"&&!S.name){toast("Please type your name first");id="start"}if(S.phase==="explain"&&id!=="explain")stopCam();S.phase=id;renderNav();render();scrollTo({top:0,behavior:"smooth"})}
+function render(){({start:rStart,engage:rEngage,explore:rExplore,explain:rExplain,extend:rExtend,evaluate:rEvaluate})[S.phase](el("main"))}
+
+/* START */
+function rStart(m){
+  const hasCues=Object.values(S.cues).some(Boolean);
+  m.innerHTML=`<div class="card"><h2>Lights, camera… Take One! 🎬</h2>
+  <p class="lead">You have your script and cue cards. Today you record a <b>short sample</b>, get feedback from a partner, and learn how to edit. Then you record the full video at home.</p>
+  <h3>By the end of this lesson, you will…</h3>
+  <ul style="margin-left:20px"><li>set up light, sound and camera for a clear video</li><li>record a 60–90 second sample using your cue cards</li><li>give and receive useful peer feedback</li><li>edit a video: trim, title slides and export</li><li>make a plan for your full recording</li></ul>
+  <h3 style="margin-top:16px">Your name</h3>
+  <div class="row"><input type="text" id="nm" value="${esc(S.name)}" placeholder="Type your full name" style="max-width:380px"><button class="btn btn-dark" onclick="setName()">Start ➜</button></div>
+  <div class="fb info" style="margin-top:14px">📂 Bring your cue cards from <b>Script Lab</b>: click <b>Open saved work</b> at the top and choose your <i>ScriptLab_….json</i> file. ${hasCues?"<b>✓ Cue cards loaded!</b>":"(Optional — you can also type them later.)"}</div></div>
+  <div class="card"><h3>📖 Key words (tap to flip)</h3><div class="gloss">${GLOSS.map(g=>`<div class="flip" onclick="this.classList.toggle('on')"><div class="flip-in"><div class="face front">${g[0]}</div><div class="face back"><span class="ar">${g[1]}</span>${g[2]}</div></div></div>`).join("")}</div></div>`;
+}
+function setName(){const v=el("nm").value.trim();if(!v)return toast("Please type your name");S.name=v;renderNav();go("engage")}
+
+/* ENGAGE */
+function rEngage(m){
+  const order=S._spotOrder||(S._spotOrder=[...SPOT.keys()].sort(()=>Math.random()-.5));
+  m.innerHTML=`<div class="card"><span class="phase-tag">ENGAGE</span><h2>What's wrong with Ahmed's recording?</h2>
+  <p class="lead">Ahmed recorded his portfolio video yesterday. Select <b>all the problems</b>, then press Check.</p>
+  ${order.map(i=>{const s=SPOT[i];let c="";if(S.spotChecked){c=S.spot[i]?(s.p?"right":"wrong"):(s.p?"missed":"")}else if(S.spot[i])c="sel";
+    return `<div class="opt ${c}" onclick="spotTog(${i})"><span>${S.spot[i]?"☑️":"⬜"}</span><div>${s.t}${S.spotChecked?`<div style="font-size:.88rem;color:var(--muted);margin-top:4px">${s.fb}</div>`:""}</div></div>`}).join("")}
+  ${S.spotChecked?`<div class="fb good">Ahmed had 5 problems. All of them are easy to fix before you press record!</div><button class="btn btn-dark" style="margin-top:12px" onclick="markDone('engage');go('explore')">Next: Set up my studio ➜</button>`:`<button class="btn btn-coral" onclick="spotCheck()">Check ✓</button>`}</div>`;
+}
+function spotTog(i){if(S.spotChecked)return;S.spot[i]=!S.spot[i];render()}
+function spotCheck(){S.spotChecked=true;let n=0;SPOT.forEach((s,i)=>{if(!!S.spot[i]===s.p)n++});addPts(n*2,`${n}/${SPOT.length} correct · +${n*2}`);render()}
+
+/* EXPLORE */
+function frameSVG(type){
+  const p={far:{r:10,cy:62,sh:18},close:{r:46,cy:66,sh:70},good:{r:20,cy:42,sh:40}}[type];
+  return `<svg viewBox="0 0 160 90" style="width:100%;border-radius:8px;background:#DCD3E6"><rect width="160" height="90" fill="#E9E2F0"/>
+  <ellipse cx="80" cy="${p.cy+p.r+p.sh*.55}" rx="${p.sh}" ry="${p.sh*.6}" fill="#2E2A38"/><circle cx="80" cy="${p.cy}" r="${p.r}" fill="#E0B48E"/></svg>`;
+}
+function rExplore(m){
+  const F=[["far","Too far away"],["close","Too close"],["good","Head and shoulders"]];
+  const n=Object.values(S.setup).filter(Boolean).length;
+  m.innerHTML=`<div class="card"><span class="phase-tag">EXPLORE</span><h2>Which shot is best?</h2>
+  <p class="lead">Choose the best framing for a talking-head video.</p>
+  <div class="grid3">${F.map(f=>`<div class="frame-pick ${S.frame?(f[0]==="good"?"right":(S.frame===f[0]?"wrong":"")):""}" onclick="pickFrame('${f[0]}')">${frameSVG(f[0])}<b>${S.frame?f[1]:"Shot "+(F.indexOf(f)+1)}</b></div>`).join("")}</div>
+  ${S.frame?`<div class="fb ${S.frame==="good"?"good":"bad"}">${S.frame==="good"?"Correct! Head and shoulders, eyes about one third from the top.":"Not quite. The best shot shows your head and shoulders in the middle."}</div>`:""}</div>
+  <div class="card"><span class="phase-tag">EXPLORE</span><h2>🎛️ Set up your studio</h2>
+  <p class="lead">Set up your phone or laptop now. Tick each item when it is true.</p>
+  ${SETUP.map((s,i)=>`<label class="check"><input type="checkbox" ${S.setup[i]?"checked":""} onchange="S.setup[${i}]=this.checked;render()"><span><b>${s[0]}</b> — ${s[1]}</span></label>`).join("")}
+  <p style="margin-top:10px;font-weight:700">${n}/${SETUP.length} ready</p>
+  ${n===SETUP.length&&S.frame?`<button class="btn btn-dark" onclick="markDone('explore');go('explain')">Studio ready! Next: Record ➜</button>`:""}</div>`;
+}
+function pickFrame(f){if(S.frame)return;S.frame=f;if(f==="good")addPts(5,"+5");render()}
+
+/* EXPLAIN: RECORD */
+let stream=null,rec=null,chunks=[],tInt=null,tSec=0,blobURL=null;
+function rExplain(m){
+  m.innerHTML=`<div class="card"><span class="phase-tag">EXPLAIN</span><h2>🎥 Record your sample (60–90 seconds)</h2>
+  <p class="lead">Choose <b>one part</b> of your video. Look at your cue card, then look up and speak to the camera. Short glances are OK!</p>
+  <div class="row" style="margin-bottom:12px"><b>Part:</b><select id="partSel" style="max-width:340px" onchange="S.part=this.value;showCue()">${PARTS.map(p=>`<option value="${p.id}" ${S.part===p.id?"selected":""}>${p.t}</option>`).join("")}</select></div>
+  <div class="studio">
+    <div><div class="screen"><video id="vid" autoplay muted playsinline></video><div class="guide"></div><div class="rec-dot" id="dot">● REC</div><div class="timer" id="tmr">0:00</div></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn btn-ghost" onclick="startCam()" id="bCam">📷 Turn on camera</button>
+        <button class="btn btn-coral" onclick="startRec()" id="bRec" disabled>● Record</button>
+        <button class="btn btn-dark" onclick="stopRec()" id="bStop" disabled>■ Stop</button>
+      </div>
+      <div id="camMsg" class="stat" style="margin-top:6px;color:var(--muted);font-size:.9rem">Your recording stays on this device. Nothing is uploaded.</div>
+    </div>
+    <div><h3>🗂️ My cue card</h3><div class="cuebox" id="cueShow"></div>
+      <input type="text" id="cueEdit" placeholder="Type key words for this part" style="margin-top:8px" oninput="S.cues[S.part]=this.value;el('cueShow').textContent=this.value||'(no cue card yet)'">
+      <div class="fb info" style="font-size:.88rem">Tip: put your cue card <b>next to the camera</b>, so a glance is short.</div></div>
+  </div>
+  <div id="playback" class="${blobURL?"":"hidden"}" style="margin-top:16px"><h3>▶ Watch your sample</h3>
+    <video id="pb" controls style="width:100%;max-width:560px;border-radius:12px;background:#000" ${blobURL?`src="${blobURL}"`:""}></video>
+    <div class="row" style="margin-top:8px"><button class="btn btn-ghost" onclick="dl()">⬇ Download my sample</button><button class="btn btn-coral" onclick="startRec()">↺ Take two</button></div></div>
+  <div class="fb info" style="margin-top:14px">📱 Camera not working? Record your sample with your <b>phone camera</b> instead, then tick the box below.</div>
+  <label class="check"><input type="checkbox" id="phoneDone" ${S.phoneDone?"checked":""} onchange="S.phoneDone=this.checked;checkRecDone()"><span>I recorded my 60–90 second sample (in the app or on my phone).</span></label>
+  <div id="recNext"></div></div>`;
+  showCue();checkRecDone();
+}
+function showCue(){const c=S.cues[S.part]||"";el("cueShow").textContent=c||"(no cue card yet)";el("cueEdit").value=c}
+async function startCam(){
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{width:1280,height:720},audio:true});el("vid").srcObject=stream;el("bRec").disabled=false;el("bCam").disabled=true;el("camMsg").textContent="Camera on. Check your light and framing, then press Record."}
+  catch(e){el("camMsg").innerHTML="<span style='color:var(--bad)'>Camera blocked or not found. Allow camera access, or record with your phone.</span>"}
+}
+function stopCam(){if(rec&&rec.state==="recording")rec.stop();if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}clearInterval(tInt)}
+function startRec(){
+  if(!stream){toast("Turn on the camera first");return}
+  chunks=[];try{rec=new MediaRecorder(stream)}catch(e){toast("Recording is not supported here. Use your phone.");return}
+  rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
+  rec.onstop=()=>{const b=new Blob(chunks,{type:rec.mimeType||"video/webm"});if(blobURL)URL.revokeObjectURL(blobURL);blobURL=URL.createObjectURL(b);S.recSeconds=tSec;el("playback").classList.remove("hidden");el("pb").src=blobURL;
+    if(tSec>=45){if(!S.recOK){S.recOK=true;addPts(15,"Sample recorded! +15")}}else toast("That was short. Try for 60–90 seconds.");checkRecDone()};
+  rec.start();tSec=0;el("tmr").textContent="0:00";el("dot").classList.add("on");el("bRec").disabled=true;el("bStop").disabled=false;
+  tInt=setInterval(()=>{tSec++;el("tmr").textContent=Math.floor(tSec/60)+":"+String(tSec%60).padStart(2,"0");if(tSec===90)toast("90 seconds! You can stop now.");if(tSec>=120)stopRec()},1000);
+}
+function stopRec(){if(rec&&rec.state==="recording")rec.stop();clearInterval(tInt);el("dot").classList.remove("on");el("bRec").disabled=false;el("bStop").disabled=true}
+function dl(){if(!blobURL)return;const a=document.createElement("a");a.href=blobURL;a.download=`Sample_${S.name.replace(/\s+/g,"_")}.webm`;a.click()}
+function checkRecDone(){const ok=S.recOK||S.phoneDone;el("recNext").innerHTML=ok?`<button class="btn btn-dark" style="margin-top:10px" onclick="markDone('explain');go('extend')">Next: Peer feedback ➜</button>`:""}
+
+/* EXTEND: FEEDBACK + EDIT */
+function rExtend(m){
+  const rated=Object.keys(S.ratings).length;
+  m.innerHTML=`<div class="card"><span class="phase-tag">EXTEND</span><h2>🤝 Peer feedback</h2>
+  <p class="lead">Swap with a partner. Your partner watches your sample and completes this form <b>on your device</b>. Be kind, be specific, be helpful.</p>
+  <div class="row"><b>Partner's name:</b><input type="text" value="${esc(S.partner)}" oninput="S.partner=this.value" style="max-width:320px"></div>
+  <div style="margin-top:10px">${RATE.map((r,i)=>`<div class="rate"><div><b>${r[0]}</b><div style="font-size:.85rem;color:var(--muted)">${r[1]}</div></div><div class="stars">${[1,2,3].map(n=>`<button class="${(S.ratings[i]||0)>=n?"on":""}" onclick="S.ratings[${i}]=${n};render()">★</button>`).join("")}</div></div>`).join("")}</div>
+  <h3>⭐ Two stars (two things that were good)</h3><textarea oninput="S.stars2=this.value" placeholder="1. Your eye contact was... 2. ...">${esc(S.stars2)}</textarea>
+  <h3>🌟 One wish (one thing to improve)</h3><textarea oninput="S.wish=this.value" placeholder="Next time, try to...">${esc(S.wish)}</textarea>
+  <div class="fb info">Useful phrases: <i>“I liked the way you…”, “Your … was very clear.”, “Next time, try to…”, “It would be even better if…”</i></div>
+  <div class="row" style="margin-top:10px"><button class="btn btn-coral" onclick="fbDone()">Save feedback ✓</button><button class="btn btn-ghost" onclick="window.print()">🖨️ Print / PDF</button></div></div>
+
+  <div class="card ${S.done.feedback?"":"hidden"}" id="editCard"><span class="phase-tag">EXTEND</span><h2>✂️ Quick edit</h2>
+  <p class="lead">You can use any editing tool you like (for example, the editor on your phone, CapCut, Clipchamp, iMovie or Canva). Every tool can do these steps. Try them on your sample now.</p>
+  <h3>Your video timeline</h3>
+  <div class="timeline">${[["Title slide","#6C6675"],["Part 1","#E8524A"],["Title","#6C6675"],["Part 2 + screenshot","#E8524A"],["Title","#6C6675"],["Part 3","#E8524A"],["Title","#6C6675"],["Part 4","#E8524A"],["Part 5","#E8524A"]].map(t=>`<div style="background:${t[1]}">${t[0]}</div>`).join("")}</div>
+  ${EDIT.map((e,i)=>`<label class="check"><input type="checkbox" ${S.edit[i]?"checked":""} onchange="S.edit[${i}]=this.checked;render()"><span><b>${e[0]}</b> — ${e[1]}</span></label>`).join("")}
+  ${Object.values(S.edit).filter(Boolean).length>=3?`<button class="btn btn-dark" style="margin-top:12px" onclick="markDone('extend');go('evaluate')">Next: My plan ➜</button>`:`<p style="margin-top:8px;color:var(--muted)">Try at least 3 steps on your sample to continue.</p>`}</div>`;
+}
+function fbDone(){
+  if(Object.keys(S.ratings).length<RATE.length)return toast("Please rate all 6 areas");
+  if(S.stars2.trim().length<10||S.wish.trim().length<5)return toast("Please write two stars and one wish");
+  if(!S.done.feedback){S.done.feedback=true;addPts(15,"Feedback saved! +15")}
+  render();el("editCard").scrollIntoView({behavior:"smooth"});
+}
+
+/* EVALUATE */
+function rEvaluate(m){
+  const lows=RATE.filter((r,i)=>(S.ratings[i]||3)<3).map(r=>r[0]);
+  const FINAL=["I will record in a quiet place with light on my face.","I will glance at my cue cards and look at the camera most of the time.","My video will have all five parts, title slides and my ID card.","My video will be 3–5 minutes and saved as MP4.","I will keep my script and cue cards as evidence."];
+  const ok=S.plan.trim().length>15&&FINAL.every((_,i)=>S.final[i]);
+  m.innerHTML=`<div class="card"><span class="phase-tag">EVALUATE</span><h2>📋 My plan for the full recording</h2>
+  ${lows.length?`<div class="fb info">Your partner suggests working on: <b>${lows.join(", ")}</b>${S.wish?` · Wish: “${esc(S.wish)}”`:""}</div>`:`<div class="fb good">Great ratings! Keep doing what works.</div>`}
+  <h3>Two things I will change in my full video:</h3>
+  <textarea oninput="S.plan=this.value" onblur="render()" placeholder="1. ...  2. ...">${esc(S.plan)}</textarea>
+  <h3>Before I record at home, I promise…</h3>
+  ${FINAL.map((f,i)=>`<label class="check"><input type="checkbox" ${S.final[i]?"checked":""} onchange="S.final[${i}]=this.checked;render()"><span>${f}</span></label>`).join("")}
+  <h3 style="margin-top:12px">Badges</h3>
+  <div class="badges">${[["engage","🔍 Problem Spotter"],["explore","🎛️ Studio Ready"],["explain","🎥 Take One"],["feedback","🤝 Feedback Friend"],["extend","✂️ Editor"]].map(b=>`<span class="badge ${S.done[b[0]]?"on":""}">${b[1]}</span>`).join("")}</div>
+  <div class="row" style="margin-top:16px"><button class="btn btn-coral" onclick="${ok?"showCert()":"toast('Write your two changes and tick every promise')"}">🏆 Get my certificate</button><button class="btn btn-ghost" onclick="saveJSON()">💾 Save my work</button></div></div>
+  <div id="certBox"></div>`;
+}
+function showCert(){
+  if(!S.done.evaluate){S.done.evaluate=true;addPts(10);renderNav()}
+  el("certBox").innerHTML=`<div class="cert"><div style="font-size:3rem">🎬</div><h2>Ready to Record!</h2><p>This certifies that</p><div class="name">${esc(S.name)}</div>
+  <p>has recorded a sample, given and received peer feedback, practised editing and made a plan for the final portfolio video in <b>Take One</b>.</p>
+  <p style="margin-top:8px">Points: <b>${S.points}</b> · ${new Date().toLocaleDateString("en-GB")}</p>
+  <p style="margin-top:14px;color:var(--muted);font-size:.85rem">Designed by: Nazila Motahari · LSC 1503</p></div>
+  <div class="row no-print" style="justify-content:center;margin-top:10px"><button class="btn btn-ghost" onclick="window.print()">🖨️ Print certificate</button></div>`;
+  confetti();el("certBox").scrollIntoView({behavior:"smooth"});
+}
+
+/* SAVE/LOAD */
+function saveJSON(){
+  const d={app:"TakeOne",version:1,saved:new Date().toISOString(),name:S.name,points:S.points,done:S.done,cues:S.cues,setup:S.setup,partner:S.partner,ratings:S.ratings,stars2:S.stars2,wish:S.wish,edit:S.edit,plan:S.plan,final:S.final,recOK:S.recOK,phoneDone:S.phoneDone};
+  const b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=`TakeOne_${(S.name||"student").replace(/\s+/g,"_")}.json`;a.click();toast("Saved!");
+}
+function loadJSON(e){
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const d=JSON.parse(r.result);
+    if(d.app==="ScriptLab"){S.cues=Object.assign({},d.cues||{});if(!S.name&&d.name)S.name=d.name;toast("Cue cards loaded from Script Lab ✓");renderNav();render();return}
+    if(d.app!=="TakeOne")throw 0;Object.assign(S,d);delete S.app;toast("Welcome back, "+S.name+"!");go("start")}catch(_){toast("This file is not from Script Lab or Take One")}};
+  r.readAsText(f);e.target.value="";
+}
+
+function confetti(){const c=el("confetti"),x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;const cols=["#E8524A","#1E1B24","#F4B740","#fff","#C93E37"];const P=Array.from({length:120},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.5,r:4+Math.random()*5,c:cols[Math.random()*cols.length|0],v:2+Math.random()*3,s:Math.random()*6}));let f=0;(function d(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.y+=p.v;p.x+=Math.sin((f+p.s)/10);x.fillStyle=p.c;x.fillRect(p.x,p.y,p.r,p.r*1.6)});if(++f<160)requestAnimationFrame(d);else x.clearRect(0,0,c.width,c.height)})()}
+renderNav();render();
+</script>
+</body>
+</html>
